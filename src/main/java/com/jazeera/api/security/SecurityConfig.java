@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize)->
                                 authorize
                                         .requestMatchers("/api/auth/**").permitAll()
+                                        .requestMatchers("/api/users/**").authenticated()
                                         .requestMatchers("/api/posts/listAllPosts").permitAll()
                                         .requestMatchers("/api/categories/**").permitAll()
                                         .requestMatchers("/api/posts/delete/**").authenticated()

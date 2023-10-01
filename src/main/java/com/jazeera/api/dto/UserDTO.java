@@ -6,4 +6,5 @@ import lombok.Data;
 public class UserDTO {
     public String username;
     public Long id;
+    public byte[] avatar;
 }

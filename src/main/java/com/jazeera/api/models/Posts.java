@@ -22,7 +22,7 @@ public class Posts {
 
     @NotNull
     @Lob @Basic(fetch = FetchType.LAZY)
-    @Column(length=100000)
+    @Column(length=160000)
     private byte[] content;
 
     @ManyToOne

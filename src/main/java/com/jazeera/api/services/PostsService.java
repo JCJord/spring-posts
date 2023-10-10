@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,27 +39,26 @@ public class PostsService {
         return postsRepository.save(posts);
     }
 
-    public List<PostsDto> getAllPosts() {
-        List<Posts> posts = postsRepository.findAll();
+    public Page<PostsDto> getAllPosts(Pageable pageable) {
+        Page<Posts> postsPage = postsRepository.findAllByOrderByCreatedAtDesc(pageable);
 
-        List<PostsDto> postsDtosList = posts.stream()
-                .map(PostsDto::convertToDto)
-                .collect(Collectors.toList());
+        Page<PostsDto> postsDtosPage = postsPage.map(PostsDto::convertToDto);
 
-        return postsDtosList;
+        return postsDtosPage;
     }
 
-    public List<PostsDto> getPostsByCategoryId(Long categoryId) {
+    public Page<PostsDto> getPostsByCategoryId(Long categoryId, Pageable pageable) {
         if (categoryId == null || categoryId <= 0) {
             throw new IllegalArgumentException("Invalid categoryId");
         }
 
-        List<Posts> posts = postsRepository.findByCategoryId(categoryId);
-        if(posts.isEmpty()) {
-            return Collections.emptyList();
+        Page<Posts> postsPage = postsRepository.findByCategoryIdOrderByCreatedAtDesc(categoryId, pageable);
+        Page<PostsDto> postsDtosPage = postsPage.map(PostsDto::convertToDto);
+
+        if(postsPage.isEmpty()) {
+            return postsDtosPage;
         }else {
-            return  posts.stream()
-                    .map(PostsDto::convertToDto).collect(Collectors.toList());
+            return  postsDtosPage;
         }
     }
 

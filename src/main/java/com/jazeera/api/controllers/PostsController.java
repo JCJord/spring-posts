@@ -7,6 +7,9 @@ import com.jazeera.api.repository.PostsRepository;
 import com.jazeera.api.services.PostsService;
 import com.jazeera.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,14 +49,17 @@ public class PostsController {
     }
 
     @GetMapping("/listAllPosts")
-    public ResponseEntity<List<PostsDto>> getAllPosts() {
-        List<PostsDto> postsDtosList = postsService.getAllPosts();
+    public ResponseEntity<Page<PostsDto>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "7") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostsDto> postsDtosList = postsService.getAllPosts(pageable);
         return new ResponseEntity<>(postsDtosList, HttpStatus.OK);
     }
 
     @GetMapping("/listByCategoryId/{categoryId}")
-    public ResponseEntity<List<PostsDto>> getPostsByCategoryId(@PathVariable Long categoryId) {
-        List<PostsDto> postsDtos = postsService.getPostsByCategoryId(categoryId);
+    public ResponseEntity<Page<PostsDto>> getPostsByCategoryId(@PathVariable Long categoryId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "7") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<PostsDto> postsDtos = postsService.getPostsByCategoryId(categoryId, pageable);
         if (!postsDtos.isEmpty()) {
             return new ResponseEntity<>(postsDtos, HttpStatus.OK);
         } else {

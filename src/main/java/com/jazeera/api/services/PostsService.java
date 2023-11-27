@@ -4,10 +4,7 @@ import com.jazeera.api.dto.PostsDto;
 import com.jazeera.api.models.Posts;
 import com.jazeera.api.repository.PostsRepository;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -27,6 +27,17 @@ public class UserService {
         return userOptional.map(UserEntity::getId).orElse(null);
     }
 
+    public byte[] getUserAvatarById(Long id) {
+        Optional<UserEntity> userOptional = userRepository.findById(id);
+        UserEntity user = userOptional.get();
+        byte[] avatar = user.getAvatar();
+        if(avatar != null){
+            return avatar;
+        }else {
+            return null;
+        }
+    }
+
     public String getSignedUsername() {
         Authentication authorizedUser = SecurityContextHolder.getContext().getAuthentication();
         return authorizedUser.getName();
